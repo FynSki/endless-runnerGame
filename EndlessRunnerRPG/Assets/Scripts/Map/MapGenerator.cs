@@ -8,6 +8,8 @@ public class MapGenerator : MonoBehaviour
     public GameObject[] thePlatform;
     public Transform generationPoint;
     public float distanceBetween;
+
+    public float newPosY;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +26,7 @@ public class MapGenerator : MonoBehaviour
     {
         if (transform.position.x < generationPoint.position.x)
         {
-            transform.position = new Vector3(transform.position.x + distanceBetween, 0f, transform.position.z);
+            transform.position = new Vector3(transform.position.x + distanceBetween, newPosY, transform.position.z);
             Instantiate(thePlatform[Random.Range(0, thePlatform.Length)], transform.position, transform.rotation);
             
         }
