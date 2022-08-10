@@ -12,6 +12,7 @@ public class playerControlHelper : MonoBehaviour
     private BoxCollider2D boxCollider2d;
 
     public float jumpVelocity;
+    public Animator anim;
 
     private void Awake() {
         rigidbody2d= transform.GetComponent<Rigidbody2D>();
@@ -33,6 +34,7 @@ public class playerControlHelper : MonoBehaviour
         {
             
             rigidbody2d.velocity = Vector2.up * jumpVelocity;
+            
         }
     }
 
@@ -44,10 +46,13 @@ public class playerControlHelper : MonoBehaviour
         
         {
             rigidbody2d.velocity = new Vector2(-moveSpeed, rigidbody2d.velocity.y);
+            transform.localScale = new Vector2(-1,1);
+            anim.SetBool("running", true);
         }
         else if(Input.GetKey(KeyCode.RightArrow)) {
             rigidbody2d.velocity = new Vector2(+moveSpeed, rigidbody2d.velocity.y);
-                
+                transform.localScale = new Vector2(1,1);
+                anim.SetBool("running", true);
             }                         
              
             
@@ -56,6 +61,7 @@ public class playerControlHelper : MonoBehaviour
                 //no key pressed
                 rigidbody2d.velocity = new Vector2(0,rigidbody2d.velocity.y);
                 rigidbody2d.constraints = RigidbodyConstraints2D.FreezePositionX| RigidbodyConstraints2D.FreezeRotation;
+                anim.SetBool("running", false);
             }
         }
 
