@@ -12,7 +12,10 @@ public class playerControlHelper : MonoBehaviour
     private BoxCollider2D boxCollider2d;
 
     public float jumpVelocity;
-    public Animator anim;
+    [SerializeField] private Animator anim;
+
+     private enum State { idle, running, jumping}
+     private State state = State.idle; 
 
     private void Awake() {
         rigidbody2d= transform.GetComponent<Rigidbody2D>();
@@ -23,12 +26,13 @@ public class playerControlHelper : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        rigidbody2d = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         // jump handler
         if(isGrounded() && Input.GetKeyDown(KeyCode.Space))
         {
@@ -39,19 +43,23 @@ public class playerControlHelper : MonoBehaviour
     }
 
     private void FixedUpdate() {
+        float hdirection = Input.GetAxis("Horizontal");
         // move handler
         float moveSpeed = 1f;
         rigidbody2d.constraints = RigidbodyConstraints2D.FreezeRotation;
-        if(Input.GetKey(KeyCode.LeftArrow))
+        //if(Input.GetKey(KeyCode.LeftArrow))
+        if(hdirection < 0)
         
         {
             rigidbody2d.velocity = new Vector2(-moveSpeed, rigidbody2d.velocity.y);
             transform.localScale = new Vector2(-1,1);
             anim.SetBool("running", true);
+            
         }
-        else if(Input.GetKey(KeyCode.RightArrow)) {
+        else if(hdirection > 0) {
             rigidbody2d.velocity = new Vector2(+moveSpeed, rigidbody2d.velocity.y);
                 transform.localScale = new Vector2(1,1);
+                state = State.running;
                 anim.SetBool("running", true);
             }                         
              
@@ -62,6 +70,7 @@ public class playerControlHelper : MonoBehaviour
                 rigidbody2d.velocity = new Vector2(0,rigidbody2d.velocity.y);
                 rigidbody2d.constraints = RigidbodyConstraints2D.FreezePositionX| RigidbodyConstraints2D.FreezeRotation;
                 anim.SetBool("running", false);
+                
             }
         }
 
@@ -88,6 +97,11 @@ public class playerControlHelper : MonoBehaviour
             
             Debug.Log(raycastHit.collider);
             return raycastHit.collider != null;
+        }
+
+        private void StateChange()
+        {
+
         }
 
     }
